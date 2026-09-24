@@ -1,4 +1,5 @@
 import java.sql.Connection;
+import java.util.List;
 
 public class GerenciadorContasApp {
     private static ContaDao dao;
@@ -17,8 +18,8 @@ public class GerenciadorContasApp {
             switch(op) {
                 case 1: criarConta(); break;
                 case 2: mostrarContas(); break;
-                case 3:
-                case 4:
+                case 3: alterarConta(); break;
+                case 4: apagarConta(); break;
                 case 5: sair = true; break;
                 default: IO.println("Opção inválida!\n");
             }
@@ -39,7 +40,7 @@ public class GerenciadorContasApp {
     private static void criarConta() {
         IO.print("Número da conta a ser criada: ");
         int nro = Integer.parseInt(IO.readln());
-        IO.print("Saldo da conta a ser criada: ");
+        IO.print("Saldo da conta a ser criado: ");
         double saldo = Double.parseDouble(IO.readln());
         Conta c = new Conta(nro, saldo);
         if (dao.criar(c)) {
@@ -50,15 +51,40 @@ public class GerenciadorContasApp {
         }
     }   
     private static void mostrarContas() {
-
+        List<Conta> contas = dao.lerTodas();
+        if (contas.isEmpty()){
+            IO.println("Nenhuma conta cadastrada");
+            return;
+        }
+        for (Conta c : contas){
+            IO.println("Conta: " + c.nroConta() + " e Saldo: " + c.saldo());
+        }
     } 
     private static void alterarConta() {
-        IO.print("Número da conta a ser criada: ");
+        IO.print("Número da conta a ser alterado: ");
         int nro = Integer.parseInt(IO.readln());
-        
-
+        IO.print("Saldo da conta a ser alterado: ");
+        double saldo = Double.parseDouble(IO.readln());
+        Conta c = new Conta(nro, saldo);
+        if(dao.atualizar(c)){
+            IO.println("Conta alterada com sucesso!");
+        }
+        else {
+            IO.println("Não foi possível criar esta conta!");
+        }
     }
     private static void apagarConta() {
-
+        IO.print("Número da conta a ser deletada: ");
+        int nro = Integer.parseInt(IO.readln());
+        Conta c = dao.buscarPeloNumero(nro);
+        if (c == null){
+            IO.println("Conta não encontrada!\n");
+            return;
+        }
+        if(dao.apagar(c)){
+            IO.println("Conta apagada com sucesso!\n");
+        } else {
+            IO.println("Não foi possível apagar a conta!\n");
+        }
     }
 }

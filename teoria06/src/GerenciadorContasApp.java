@@ -7,7 +7,7 @@ public class GerenciadorContasApp {
 
     public static void main (String [] args) throws Exception {
         String url;
-        url = "jdbc:postgresql://aws-0-us-west-2.pooler.supabase.com:6543/postgres?user=postgres.kmgceisasvvupvssughl&password=HS74@#hs28101997";
+        url = "jdbc:postgresql://aws-0-us-west-2.pooler.supabase.com:6543/postgres?user=&password=";
         Connection conexao;
         conexao = ConnectionFactory.getConnection(url);
         contaDao = new ContaDao(conexao);
